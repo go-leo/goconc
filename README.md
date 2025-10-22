@@ -210,6 +210,29 @@ group.Do("key1", func() {
 })
 ```
 
+### 12. Goroutine Pool (gofer)
+Provides a unified interface for various goroutine pool implementations.
+
+```go
+// Create a sample goroutine pool
+gofer := sample.New(
+    sample.CorePoolSize(5),
+    sample.MaximumPoolSize(10),
+    sample.KeepAliveTime(60*time.Second)
+)
+
+// Submit a task
+gofer.Go(func() {
+    // Execute task
+    fmt.Println("Task executed")
+})
+
+// Close the pool gracefully
+ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+defer cancel()
+gofer.Close(ctx)
+```
+
 ## Installation
 
 ```bash
