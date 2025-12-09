@@ -24,9 +24,6 @@ var (
 
 var _ gofer.Gofer = (*Gofer)(nil)
 
-// 定义线程池关闭状态的常量
-const stateClosed = -1
-
 // options 线程池配置选项
 type options struct {
 	// 核心线程数，即使线程处于空闲状态，也不会被回收
@@ -124,8 +121,9 @@ type Gofer struct {
 	options *options       // 配置选项
 	m       sync.Mutex     // 互斥锁，保护状态变更
 	wg      sync.WaitGroup // 等待组，等待所有任务完成
-	state   int32          // 当前运行的线程数，-1表示已关闭
-	closeC  chan struct{}  // 关闭通知channel
+	workers atomic.Int64
+	closed  atomic.Bool   // 当前运行状态
+	closeC  chan struct{} // 关闭通知channel
 }
 
 // Go 提交一个任务到线程池执行
@@ -136,31 +134,31 @@ func (g *Gofer) Go(task func()) error {
 	}
 
 	// 检查线程池是否已关闭（无锁检查）
-	state := atomic.LoadInt32(&g.state)
-	if state == stateClosed {
+	if g.closed.Load() {
 		return ErrPoolClosed
 	}
 
 	// 检查是否超过最大线程数（无锁检查）
-	if int(state) >= g.options.MaximumPoolSize {
+	if g.workers.Load() >= int64(g.options.MaximumPoolSize) {
 		return ErrPoolFull
 	}
 
 	// 加锁进行精确检查和状态变更
 	g.m.Lock()
 	defer g.m.Unlock()
-	state = atomic.LoadInt32(&g.state)
-	if state == stateClosed {
+
+	if g.closed.Load() {
 		return ErrPoolClosed
 	}
 
 	// 再次检查是否超过最大线程数
-	if int(state) >= g.options.MaximumPoolSize {
+	workers := g.workers.Load()
+	if workers >= int64(g.options.MaximumPoolSize) {
 		return ErrPoolFull
 	}
 
 	// 当提交一个新任务时，线程池会判断当前运行的线程数是否小于corePoolSize，如果小于，则创建新线程执行任务
-	if int(state) < g.options.CorePoolSize {
+	if workers < int64(g.options.CorePoolSize) {
 		newWorker := &worker{
 			Options:   g.options,
 			Gofer:     g,
@@ -192,25 +190,25 @@ func (g *Gofer) Go(task func()) error {
 // Close 关闭线程池，等待所有任务完成
 func (g *Gofer) Close(ctx context.Context) error {
 	// 检查线程池是否已关闭（无锁检查）
-	if atomic.LoadInt32(&g.state) == stateClosed {
+	if g.closed.Load() {
 		return ErrPoolClosed
 	}
 
 	// 加锁进行精确检查和状态变更
 	g.m.Lock()
 	defer g.m.Unlock()
-	if atomic.LoadInt32(&g.state) == stateClosed {
+	if g.closed.Load() {
 		return ErrPoolClosed
 	}
 
 	// 设置关闭状态并关闭通知channel
-	atomic.StoreInt32(&g.state, stateClosed)
-	close(g.closeC)
+	g.closed.Store(true)
 
 	// 创建等待完成的channel
 	waitC := make(chan struct{})
 	go func() {
-		g.wg.Wait()  // 等待所有任务完成
+		g.wg.Wait() // 等待所有任务完成
+		close(g.closeC)
 		close(waitC) // 关闭等待channel
 	}()
 
@@ -235,13 +233,13 @@ type worker struct {
 func (w *worker) work() {
 	// 增加等待组计数和线程池状态计数
 	w.Gofer.wg.Add(1)
-	atomic.AddInt32(&w.Gofer.state, 1)
+	w.Gofer.workers.Add(1)
 
 	// 启动goroutine执行任务
 	go func() {
 		// 任务完成后减少等待组计数和线程池状态计数
 		defer w.Gofer.wg.Done()
-		defer atomic.AddInt32(&w.Gofer.state, -1)
+		defer w.Gofer.workers.Add(-1)
 
 		// 捕获任务执行过程中的panic
 		defer func() {
