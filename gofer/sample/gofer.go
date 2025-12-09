@@ -10,6 +10,8 @@ import (
 	"sync"
 	"sync/atomic"
 	"time"
+
+	"github.com/go-leo/goconc/gofer"
 )
 
 // 定义线程池相关的错误类型
@@ -20,7 +22,7 @@ var (
 	ErrPoolSizeInvalid = errors.New("gofer: maximumPoolSize must be greater than or equal to corePoolSize")
 )
 
-var _ gofer.Gofer = (*gofer)(nil)
+var _ gofer.Gofer = (*Gofer)(nil)
 
 // 定义线程池关闭状态的常量
 const stateClosed = -1
@@ -109,16 +111,16 @@ func (o *options) Correct() *options {
 }
 
 // New 创建一个新的线程池实例
-func New(opts ...Option) *gofer {
+func New(opts ...Option) *Gofer {
 	options := new(options).Apply(opts...).Correct()
-	return &gofer{
+	return &Gofer{
 		Options: options,
 		CloseC:  make(chan struct{}), // 用于通知关闭的channel
 	}
 }
 
-// gofer 线程池结构体
-type gofer struct {
+// Gofer 线程池结构体
+type Gofer struct {
 	Options   *options       // 配置选项
 	M         sync.Mutex     // 互斥锁，保护状态变更
 	WaitGroup sync.WaitGroup // 等待组，等待所有任务完成
@@ -127,7 +129,7 @@ type gofer struct {
 }
 
 // Go 提交一个任务到线程池执行
-func (g *gofer) Go(task func()) error {
+func (g *Gofer) Go(task func()) error {
 	// 检查任务是否为空
 	if task == nil {
 		return errors.New("gofer: task is nil")
@@ -188,7 +190,7 @@ func (g *gofer) Go(task func()) error {
 }
 
 // Close 关闭线程池，等待所有任务完成
-func (g *gofer) Close(ctx context.Context) error {
+func (g *Gofer) Close(ctx context.Context) error {
 	// 检查线程池是否已关闭（无锁检查）
 	if atomic.LoadInt32(&g.State) == stateClosed {
 		return ErrPoolClosed
@@ -224,7 +226,7 @@ func (g *gofer) Close(ctx context.Context) error {
 // worker 工作线程结构体
 type worker struct {
 	Options   *options // 线程池配置
-	Gofer     *gofer   // 所属的线程池
+	Gofer     *Gofer   // 所属的线程池
 	Core      bool     // 是否为核心线程
 	FirstTask func()   // 第一个要执行的任务
 }
