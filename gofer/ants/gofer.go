@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/go-leo/goconc/gofer"
+	"github.com/soyacen/goconc/gofer"
 	ants "github.com/panjf2000/ants/v2"
 )
 

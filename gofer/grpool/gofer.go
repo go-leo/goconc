@@ -4,7 +4,7 @@ package grpool
 import (
 	"context"
 
-	"github.com/go-leo/goconc/gofer"
+	"github.com/soyacen/goconc/gofer"
 	"github.com/ivpusic/grpool"
 )
 

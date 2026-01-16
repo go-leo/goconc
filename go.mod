@@ -1,4 +1,4 @@
-module github.com/go-leo/goconc
+module github.com/soyacen/goconc
 
 go 1.20
 

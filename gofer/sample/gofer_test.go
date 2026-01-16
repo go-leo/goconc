@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/go-leo/goconc/gofer/sample"
+	"github.com/soyacen/goconc/gofer/sample"
 )
 
 // TestNew 测试创建新的gofer实例

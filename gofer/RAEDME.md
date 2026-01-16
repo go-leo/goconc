@@ -22,13 +22,13 @@ type Gofer interface {
 }
 ```
 
-- [Go(f func()) error](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/gofer.go#L10-L10): Submit an asynchronous task for execution
+- [Go(f func()) error](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/gofer.go#L10-L10): Submit an asynchronous task for execution
 - `Close(ctx context.Context) error`: Close the executor and wait for all tasks to complete
 
 ## Installation
 
 ```bash
-go get github.com/go-leo/goconc/gofer
+go get github.com/soyacen/goconc/gofer
 ```
 
 ## Implementation List
@@ -45,11 +45,11 @@ A simple implementation based on `sync.WaitGroup` and `atomic` without using thi
 - **Thread Safety**: All operations are thread-safe and support concurrent access
 
 #### Configuration Options:
-- [CorePoolSize](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L42-L46): Core thread count - threads will not be recycled even when idle
-- [MaximumPoolSize](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L49-L53): Maximum thread count the pool can accommodate
-- [KeepAliveTime](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L56-L60): Idle survival time for non-core threads
-- [WorkQueue](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L63-L67): Task queue for storing tasks waiting for execution
-- [Recover](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L70-L74): Custom error handling function for handling panics during task execution
+- [CorePoolSize](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L42-L46): Core thread count - threads will not be recycled even when idle
+- [MaximumPoolSize](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L49-L53): Maximum thread count the pool can accommodate
+- [KeepAliveTime](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L56-L60): Idle survival time for non-core threads
+- [WorkQueue](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L63-L67): Task queue for storing tasks waiting for execution
+- [Recover](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L70-L74): Custom error handling function for handling panics during task execution
 
 #### Usage Example:
 ```go

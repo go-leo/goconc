@@ -1,7 +1,7 @@
 # goconc - Go Concurrency Utilities
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/go-leo/goconc.svg)](https://pkg.go.dev/github.com/go-leo/goconc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/go-leo/goconc)](https://goreportcard.com/report/github.com/go-leo/goconc)
+[![Go Reference](https://pkg.go.dev/badge/github.com/soyacen/goconc.svg)](https://pkg.go.dev/github.com/soyacen/goconc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/soyacen/goconc)](https://goreportcard.com/report/github.com/soyacen/goconc)
 
 goconc is a comprehensive Go concurrency utilities library that provides enhanced synchronization primitives, concurrent data structures, and utility functions to simplify concurrent programming in Go.
 
@@ -236,12 +236,12 @@ gofer.Close(ctx)
 ## Installation
 
 ```bash
-go get github.com/go-leo/goconc
+go get github.com/soyacen/goconc
 ```
 
 ## Documentation
 
-Full documentation is available at [GoDoc](https://pkg.go.dev/github.com/go-leo/goconc).
+Full documentation is available at [GoDoc](https://pkg.go.dev/github.com/soyacen/goconc).
 
 ## Testing
 

@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/go-leo/goconc/gofer"
-	"github.com/go-leo/goconc/waiter"
+	"github.com/soyacen/goconc/gofer"
+	"github.com/soyacen/goconc/waiter"
 )
 
 var (

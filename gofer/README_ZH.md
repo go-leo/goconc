@@ -29,7 +29,7 @@ type Gofer interface {
 ## 安装
 
 ```bash
-go get github.com/go-leo/goconc/gofer
+go get github.com/soyacen/goconc/gofer
 ```
 
 ## 实现列表
@@ -46,11 +46,11 @@ go get github.com/go-leo/goconc/gofer
 - **线程安全**: 所有操作都是线程安全的，支持并发访问
 
 #### 配置选项：
-- [CorePoolSize](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L42-L46): 核心线程数，即使线程处于空闲状态也不会被回收
-- [MaximumPoolSize](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L49-L53): 线程池所能容纳的最大线程数
-- [KeepAliveTime](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L56-L60): 非核心线程闲置时的存活时间
-- [WorkQueue](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L63-L67): 任务队列，用于存放等待执行的任务
-- [Recover](file:///Users/soyacen/Workspace/github.com/go-leo/goconc/gofer/sample/gofer.go#L70-L74): 自定义错误处理函数，用于处理任务执行过程中的 panic
+- [CorePoolSize](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L42-L46): 核心线程数，即使线程处于空闲状态也不会被回收
+- [MaximumPoolSize](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L49-L53): 线程池所能容纳的最大线程数
+- [KeepAliveTime](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L56-L60): 非核心线程闲置时的存活时间
+- [WorkQueue](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L63-L67): 任务队列，用于存放等待执行的任务
+- [Recover](file:///Users/soyacen/Workspace/github.com/soyacen/goconc/gofer/sample/gofer.go#L70-L74): 自定义错误处理函数，用于处理任务执行过程中的 panic
 
 #### 使用示例：
 ```go

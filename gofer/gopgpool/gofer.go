@@ -5,7 +5,7 @@ import (
 	"context"
 	"sync"
 
-	"github.com/go-leo/goconc/gofer"
+	"github.com/soyacen/goconc/gofer"
 	"gopkg.in/go-playground/pool.v3"
 )
 

@@ -5,7 +5,7 @@ import (
 	"context"
 
 	"github.com/Jeffail/tunny"
-	"github.com/go-leo/goconc/gofer"
+	"github.com/soyacen/goconc/gofer"
 )
 
 // 确保Gofer实现了gofer.Gofer接口
